@@ -236,6 +236,7 @@
                                 </c:if>
                                 <c:if test="${not empty buildingEdit.id}">
                                     <button class="btn btn-warning" id="btnAddOrUpdateBuilding">Sửa tòa nhà</button>
+                                    <form:input path="id" type="hidden" value="${buildingEdit.id}"/>
                                 </c:if>
                                 <a href="/admin/building-list">
                                     <button type="button" class="btn btn-primary">Hủy thao tác</button>

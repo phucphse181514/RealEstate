@@ -2,11 +2,17 @@ package com.javaweb.service.impl;
 
 import com.javaweb.constant.SystemConstant;
 import com.javaweb.converter.UserConverter;
+import com.javaweb.entity.AssignmentBuildingEntity;
+import com.javaweb.entity.BuildingEntity;
 import com.javaweb.model.dto.PasswordDTO;
 import com.javaweb.model.dto.UserDTO;
 import com.javaweb.entity.RoleEntity;
 import com.javaweb.entity.UserEntity;
 import com.javaweb.exception.MyException;
+import com.javaweb.model.response.ResponseDTO;
+import com.javaweb.model.response.StaffResponseDTO;
+import com.javaweb.repository.AssignmentBuildingRepository;
+import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RoleRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.service.IUserService;
@@ -39,7 +45,10 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserConverter userConverter;
-
+    @Autowired
+    private AssignmentBuildingRepository assignmentBuildingRepository;
+    @Autowired
+    private BuildingRepository buildingRepository;
 
 
     @Override
@@ -186,5 +195,28 @@ public class UserService implements IUserService {
             staffs.put(it.getId(), it.getFullName());
         }
         return staffs;
+    }
+    @Override
+    public ResponseDTO listStaff(Long id){
+        // Lấy tất cả nhaan viên (đã giao hoặc chưa giao)
+        List<UserEntity> allUserEntities = userRepository.findByStatusAndRoles_Code(1,"STAFF");
+        //lấy tất cả nhân viên quản lý toa nhà có id gửi veef
+        BuildingEntity buildingEntity = buildingRepository.findOneById(id);
+        List<AssignmentBuildingEntity> assignmentBuildingEntities = assignmentBuildingRepository.findByBuildingsIs(buildingEntity);
+        List<UserEntity> assignedUserEntities = userRepository.findByAssignmentBuildingEntitiesIn(assignmentBuildingEntities);
+        List<StaffResponseDTO> staffAssignment = new ArrayList<>();
+        for(UserEntity userEntity : allUserEntities) {
+            StaffResponseDTO staffResponseDTO = new StaffResponseDTO();
+            staffResponseDTO.setStaffId(userEntity.getId());
+            staffResponseDTO.setFullName(userEntity.getFullName());
+            if(assignedUserEntities.contains(userEntity)) {
+                staffResponseDTO.setChecked("checked");
+            }
+            staffAssignment.add(staffResponseDTO);
+        }
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setData(staffAssignment);
+        responseDTO.setMessage("Success");
+        return responseDTO;
     }
 }

@@ -6,7 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="/common/taglib.jsp"%>>
+<%@include file="/common/taglib.jsp"%>
+<c:url var="buildingAPI" value="/api/buildings"/>
 <html>
 <head>
     <title>Danh sách tòa nhà</title>
@@ -285,7 +286,7 @@
                                 </td>
                                 <td>${item.name}</td>
                                 <td>${item.address}</td>
-                                <td>${item.floorArea}</td>
+                                <td>${item.numberOfBasement}</td>
                                 <td>${item.managerName}</td>
                                 <td>${item.managerPhone}</td>
 
@@ -361,26 +362,6 @@
                     </thead>
 
                     <tbody>
-                    <tr>
-                        <td class="center">
-                            <input type="checkbox" id="checkbox_1" value="1" />
-                        </td>
-                        <td>Nguyen Van A</td>
-                    </tr>
-
-                    <tr>
-                        <td class="center">
-                            <input type="checkbox" id="checkbox_2" value="3" />
-                        </td>
-                        <td>Nguyen Van B</td>
-                    </tr>
-                    <tr>
-                        <td class="center">
-                            <input type="checkbox" id="checkbox_3" value="5" />
-                        </td>
-                        <td>Nguyen Van C</td>
-                    </tr>
-
                     </tbody>
                 </table>
                 <input type="hidden" id="buildingId" name="buildingId" value="">
@@ -405,34 +386,56 @@
     </div>
 </div>
 <script>
-    function assignmentBuilding(buildingId){
+    function assignmentBuilding(buildingId) {
         $('#assignmentBuildingModal').modal();
         $('#buildingId').val(buildingId);
-        $('#btnAssignmentBuilding').click(function(e){
-                e.preventDefault;
-                var data = {};
-                data['buildingId'] = $('#buildingId').val();
-                var staffs = $('#staffList').find('tbody input[type=checkbox]:checked').map(function(){
-                    return $(this).val();
-                }).get();   // .get() chuyeern jquey object sang dạng mảng
-                data["staffs"] = staffs;
-                $.ajax({
-                    type: "PUT",
-                    url: "http://localhost:8080/api/building/",
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(response){
-                        console.log("success");
-                    },
-                    error: function(response){
-                        console.log("failed");
-                        console.log(response);
-                    }
-                });
-            }
-        )
+        loadStaffs(buildingId);
+            $('#btnAssignmentBuilding').click(function(e){
+                    e.preventDefault;
+                    var data = {};
+                    data['buildingId'] = $('#buildingId').val();
+                    var staffs = $('#staffList').find('tbody input[type=checkbox]:checked').map(function(){
+                        return $(this).val();
+                    }).get();   // .get() chuyeern jquey object sang dạng mảng
+                    data["staffs"] = staffs;
+                    $.ajax({
+                        type: "PUT",
+                        url: '${buildingAPI}',
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        success: () =>{
+                            alert("Giao tòa nhà thành công!")
+                            window.location.replace("/admin/building-list")
+                        },
+                        error: function(){
+                            alert("Giao tòa nhà không thành công!")
+                        }
+                    });
+                }
+            )
     }
+    function loadStaffs(buildingId) {
+        $.ajax({
+            type: "GET",
+            url: '${buildingAPI}/' + buildingId + '/staffs',
+            dataType: "json",
+            success: function(response){
+                var row = '';
+                $.each(response.data, function (index, item){
+                    row += '<tr>';
+                    row += '<td class="center"><input type="checkbox" id="checkbox_' + item.staffId +'" value="' + item.staffId + '" ' + item.checked + ' /></td>'
+                    row += '<td>'+ item.fullName +'</td>'
+                    row += '</tr>';
+                })
+                $('#staffList tbody').html(row);
+            },
+            error: function(response){
+                console.log("failed");
+                console.log(response);
+            }
+        });
+    }
+
     $('#btnDeleteBuildings').click(function(e){
         e.preventDefault;
         var data = {}
@@ -452,7 +455,7 @@
     function deleteBuilding(data){
         $.ajax({
             type: "DELETE",
-            url: "/api/buildings",
+            url: '${buildingAPI}',
             data: JSON.stringify(data['ids']),
             contentType: "application/json",
             dataType : "text",

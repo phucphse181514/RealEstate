@@ -10,4 +10,7 @@ import java.util.List;
 public interface RentAreaRepository extends JpaRepository<RentAreaEntity, Long> {
 
     void deleteByBuildingIdIn(List<Long> ids);
+
+    void deleteByBuildingIdIs(Long id);
+
 }
