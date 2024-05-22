@@ -59,21 +59,15 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public void addOrUpdateBuilding(BuildingDTO buildingDTO) {
-        BuildingEntity buildingEntity = modelMapper.map(buildingDTO, BuildingEntity.class);
-        buildingEntity.setType(String.join(",", buildingDTO.getTypeCode()));
+        BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
         if(buildingDTO.getRentArea() != null && !buildingDTO.getRentArea().isEmpty()) {
-            rentAreaRepository.deleteByBuildingIdIs(buildingDTO.getId());
+            buildingRepository.save(buildingEntity);
             List<RentAreaEntity> rentAreaEntities = new ArrayList<RentAreaEntity>();
             List<String> rentAreaInput = Arrays.asList(buildingDTO.getRentArea().split(",\\s*"));
             List<Long> rentAreaList = rentAreaInput.stream().map(Long::parseLong).collect(Collectors.toList());
             for (Long rentAreaValue : rentAreaList) {
                 RentAreaEntity rentAreaEntity = new RentAreaEntity();
                 rentAreaEntity.setValue(rentAreaValue);
-                rentAreaEntities.add(rentAreaEntity);
-            }
-            buildingEntity.setRentAreas(rentAreaEntities);
-            buildingRepository.save(buildingEntity);
-            for (RentAreaEntity rentAreaEntity : rentAreaEntities) {
                 rentAreaEntity.setBuilding(buildingEntity);
                 rentAreaRepository.save(rentAreaEntity);
             }
@@ -81,7 +75,6 @@ public class BuildingService implements IBuildingService {
         else{
             buildingRepository.save(buildingEntity);
             }
-
     }
 
 

@@ -1,14 +1,19 @@
 package com.javaweb.converter;
 
 import com.javaweb.entity.BuildingEntity;
+import com.javaweb.entity.RentAreaEntity;
 import com.javaweb.enums.districtCode;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
+import com.javaweb.repository.RentAreaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -17,6 +22,10 @@ public class BuildingConverter {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private RentAreaRepository rentAreaRepository;
+
     public BuildingSearchResponse toBuildingSearchResponse (BuildingEntity building) {
         BuildingSearchResponse buildingSearchResponse = modelMapper.map(building, BuildingSearchResponse.class); // BuildingDTO.class generic class
         String districtName = districtCode.district().get(building.getDistrict());
@@ -26,5 +35,23 @@ public class BuildingConverter {
         String rentAreas = building.getRentAreas().stream().map(item -> item.getValue().toString()).collect(Collectors.joining(", "));
         buildingSearchResponse.setRentArea(rentAreas);
         return buildingSearchResponse;
+    }
+
+    public BuildingEntity toBuildingEntity (BuildingDTO buildingDTO) {
+        BuildingEntity buildingEntity = modelMapper.map(buildingDTO, BuildingEntity.class);
+        buildingEntity.setType(String.join(",", buildingDTO.getTypeCode()));
+        if(buildingDTO.getRentArea() != null && !buildingDTO.getRentArea().isEmpty()) {
+            rentAreaRepository.deleteByBuildingIdIs(buildingDTO.getId());
+            List<RentAreaEntity> rentAreaEntities = new ArrayList<RentAreaEntity>();
+            List<String> rentAreaInput = Arrays.asList(buildingDTO.getRentArea().split(",\\s*"));
+            List<Long> rentAreaList = rentAreaInput.stream().map(Long::parseLong).collect(Collectors.toList());
+            for (Long rentAreaValue : rentAreaList) {
+                RentAreaEntity rentAreaEntity = new RentAreaEntity();
+                rentAreaEntity.setValue(rentAreaValue);
+                rentAreaEntities.add(rentAreaEntity);
+            }
+            buildingEntity.setRentAreas(rentAreaEntities);
+        }
+        return buildingEntity;
     }
 }

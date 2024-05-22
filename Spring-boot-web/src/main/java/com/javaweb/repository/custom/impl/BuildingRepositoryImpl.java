@@ -23,7 +23,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
             for(Field item : fields) {
                 item.setAccessible(true);
                 String fieldName = item.getName();
-                if(!fieldName.equals("staffId") && !fieldName.equals("typeCode") && !fieldName.startsWith("area")&& !fieldName.startsWith("rentPrice")) {
+                if(!fieldName.equals("staffId") && !fieldName.startsWith("area")&& !fieldName.startsWith("rentPrice")) {
                     Object value = item.get(buildingSearchRequest);
                     if(value != null) {
                         if(StringUtil.checkString(value.toString())) {
@@ -86,7 +86,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         List<String> typeCode = buildingSearchRequest.getTypeCode();
         if (typeCode != null && !typeCode.isEmpty()) {
             where.append(" AND (");
-            String sqlJoin = typeCode.stream().map(item-> "renttype.code = '" + item + "'").collect(Collectors.joining(" OR "));
+            String sqlJoin = typeCode.stream().map(item-> "building.type like '%" + item + "%'").collect(Collectors.joining(" OR "));
             where.append(sqlJoin + ")");
         }
 
@@ -104,10 +104,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         Long rentAreaTo = buildingSearchRequest.getAreaTo();
         if ( rentAreaFrom != null || rentAreaTo != null ) {
             sql.append( " JOIN rentarea ON building.id = rentarea.buildingid");
-        }
-        List<String> typeCode = buildingSearchRequest.getTypeCode();
-        if (typeCode != null && !typeCode.isEmpty() ) {
-            sql.append(" JOIN buildingrenttype ON building.id = buildingrenttype.buildingid JOIN renttype ON buildingrenttype.renttypeid = renttype.id ");
         }
     }
 

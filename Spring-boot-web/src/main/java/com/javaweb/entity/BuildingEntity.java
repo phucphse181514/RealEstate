@@ -16,10 +16,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="building")
-public class BuildingEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class BuildingEntity extends BaseEntity{
+
     @Column(name = "name")
     private String name;
 
@@ -125,21 +123,6 @@ public class BuildingEntity {
 
     @Column(name = "avatar")
     private String avatar;
-
-    @Column(name = "createddate")
-    private String createdDate;
-
-
-    @Column(name = "modifieddate")
-    private String modifiedDate;
-
-    @Column(name = "createdby")
-    private String createdBy;
-
-
-    @Column(name = "modifiedby")
-    private String modifiedBy;
-
 
     @Column(name = "managername")
     private String managerName;

@@ -17,38 +17,14 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "rentarea")
-public class RentAreaEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RentAreaEntity extends BaseEntity{
 
-    @Getter
-    @Setter
-    private Long id;
     @Column(name = "value")
-    @Getter
-    @Setter
     private Long value;
-    @Column(name = "createddate")
-    @Getter
-    @Setter
-    private String createdDate;
-    @Column(name = "modifieddate")
-    @Getter
-    @Setter
-    private String modifiedDate;
-    @Column(name = "createdby")
-    @Getter
-    @Setter
-    private String createdBy;
-    @Column(name = "modifiedby")
-    @Getter
-    @Setter
-    private String modifiedBy;
-
     @ManyToOne
     @JoinColumn(name = "buildingid")
-    @Getter
-    @Setter
     private BuildingEntity building;
 }
