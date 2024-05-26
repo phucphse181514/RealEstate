@@ -2,6 +2,7 @@ package com.javaweb.controller.admin;
 
 
 
+import com.javaweb.constant.SystemConstant;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.RentAreaEntity;
 import com.javaweb.enums.districtCode;
@@ -13,15 +14,20 @@ import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
+import com.javaweb.utils.DisplayTagUtils;
+import com.javaweb.utils.MessageUtils;
+import org.apache.commons.lang.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController (value="buildingControllerOfAdmin")
@@ -41,15 +47,22 @@ public class BuildingController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private MessageUtils messageUtil;
+
     @GetMapping(value="/admin/building-list")
-    public ModelAndView buildingList(@ModelAttribute("modelSearch") BuildingSearchRequest buildingSearchRequest){
+    public ModelAndView buildingList(@ModelAttribute(SystemConstant.MODEL) BuildingSearchRequest model, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("admin/building/list");
+        DisplayTagUtils.of(request, model);
         mav.addObject("staffs",userService.getStaffs());
         mav.addObject("districtCode", districtCode.district());
         mav.addObject("typeCodes", typeCode.getTypeCode());
         //Xuong DB lay data len
-        List<BuildingSearchResponse> result = buildingService.findAll(buildingSearchRequest);
-        mav.addObject("buildings", result);
+        List<BuildingSearchResponse> result = buildingService.findAll(model);
+        model.setListResult(result);
+        model.setTotalItems(buildingService.countTotalItems());
+        mav.addObject(SystemConstant.MODEL, model);
+        initMessageResponse(mav, request);
         return mav;
     }
     @GetMapping(value="/admin/building-edit")
@@ -85,5 +98,12 @@ public class BuildingController {
         //findByBuildingId
         return mav;
     }
-
+    private void initMessageResponse(ModelAndView mav, HttpServletRequest request) {
+        String message = request.getParameter("message");
+        if (message != null && StringUtils.isNotEmpty(message)) {
+            Map<String, String> messageMap = messageUtil.getMessage(message);
+            mav.addObject(SystemConstant.ALERT, messageMap.get(SystemConstant.ALERT));
+            mav.addObject(SystemConstant.MESSAGE_RESPONSE, messageMap.get(SystemConstant.MESSAGE_RESPONSE));
+        }
+    }
 }

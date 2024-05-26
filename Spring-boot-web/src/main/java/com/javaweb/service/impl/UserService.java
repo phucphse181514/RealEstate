@@ -45,8 +45,10 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserConverter userConverter;
+
     @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
+
     @Autowired
     private BuildingRepository buildingRepository;
 

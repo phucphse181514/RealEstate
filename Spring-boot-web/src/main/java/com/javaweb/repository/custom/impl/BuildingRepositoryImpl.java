@@ -123,4 +123,15 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
         return query.getResultList();
     }
+
+    @Override
+    public int countTotalItem() {
+        String sql = buildQueryFilter();
+        Query query = entityManager.createNativeQuery(sql.toString());
+        return query.getResultList().size();
+    }
+    private String buildQueryFilter() {
+        String sql = "SELECT * FROM building";
+        return sql;
+    }
 }

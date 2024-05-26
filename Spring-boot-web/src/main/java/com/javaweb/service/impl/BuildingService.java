@@ -100,4 +100,9 @@ public class BuildingService implements IBuildingService {
         }
     }
 
+    @Override
+    public int countTotalItems() {
+        return buildingRepository.countTotalItem();
+    }
+
 }

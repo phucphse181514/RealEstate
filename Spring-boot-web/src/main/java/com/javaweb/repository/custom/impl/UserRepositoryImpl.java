@@ -35,7 +35,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		Query query = entityManager.createNativeQuery(sql.toString(), UserEntity.class);
 		return query.getResultList();
 	}
-
 	@Override
 	public int countTotalItem() {
 		String sql = buildQueryFilter();

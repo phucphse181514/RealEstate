@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface BuildingRepositoryCustom {
     List<BuildingEntity> findAll(BuildingSearchRequest buildingSearchRequest);
+    int countTotalItem();
+
 }

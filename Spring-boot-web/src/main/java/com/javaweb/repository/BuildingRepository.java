@@ -12,4 +12,6 @@ public interface BuildingRepository extends JpaRepository<BuildingEntity, Long>,
     BuildingEntity findOneById(Long id);
 
     List<BuildingEntity> findAllByIdIn(List<Long> ids);
+
+
 }

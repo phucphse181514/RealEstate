@@ -16,4 +16,5 @@ public interface IBuildingService {
 
     void assignBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
 
+    int countTotalItems();
 }
