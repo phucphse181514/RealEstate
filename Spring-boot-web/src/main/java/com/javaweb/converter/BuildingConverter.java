@@ -41,13 +41,13 @@ public class BuildingConverter {
         BuildingEntity buildingEntity = modelMapper.map(buildingDTO, BuildingEntity.class);
         buildingEntity.setType(String.join(",", buildingDTO.getTypeCode()));
         if(buildingDTO.getRentArea() != null && !buildingDTO.getRentArea().isEmpty()) {
-            rentAreaRepository.deleteByBuildingIdIs(buildingDTO.getId());
             List<RentAreaEntity> rentAreaEntities = new ArrayList<RentAreaEntity>();
             List<String> rentAreaInput = Arrays.asList(buildingDTO.getRentArea().split(",\\s*"));
             List<Long> rentAreaList = rentAreaInput.stream().map(Long::parseLong).collect(Collectors.toList());
             for (Long rentAreaValue : rentAreaList) {
                 RentAreaEntity rentAreaEntity = new RentAreaEntity();
                 rentAreaEntity.setValue(rentAreaValue);
+                rentAreaEntity.setBuilding(buildingEntity);
                 rentAreaEntities.add(rentAreaEntity);
             }
             buildingEntity.setRentAreas(rentAreaEntities);

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -125,13 +126,11 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     }
 
     @Override
-    public int countTotalItem() {
-        String sql = buildQueryFilter();
-        Query query = entityManager.createNativeQuery(sql.toString());
-        return query.getResultList().size();
+    public int countTotalItem(BuildingSearchRequest buildingSearchRequest) {
+        return findAll(buildingSearchRequest).size();
     }
-    private String buildQueryFilter() {
-        String sql = "SELECT * FROM building";
-        return sql;
-    }
+
+
+
+
 }

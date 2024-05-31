@@ -60,7 +60,7 @@ public class BuildingController {
         //Xuong DB lay data len
         List<BuildingSearchResponse> result = buildingService.findAll(model);
         model.setListResult(result);
-        model.setTotalItems(buildingService.countTotalItems());
+        model.setTotalItems(buildingService.countTotalItems(model));
         mav.addObject(SystemConstant.MODEL, model);
         initMessageResponse(mav, request);
         return mav;
@@ -79,6 +79,7 @@ public class BuildingController {
         List<String> typeCodeList = Arrays.asList(buildingEntity.getType().split(",\\s*"));
         BuildingDTO buildingDTO = modelMapper.map(buildingEntity, BuildingDTO.class);
         buildingDTO.setTypeCode(typeCodeList);
+        buildingDTO.setImage(buildingEntity.getAvatar());
         if(!buildingEntity.getRentAreas().isEmpty()){
             String rentArea = "";
             int count = 0;

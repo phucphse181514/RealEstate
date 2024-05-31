@@ -14,9 +14,13 @@ import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.service.IBuildingService;
+import com.javaweb.utils.UploadFileUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 import java.util.Arrays;
 
 import java.util.ArrayList;
@@ -26,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class BuildingService implements IBuildingService {
+
 
     @Autowired
     private BuildingRepository buildingRepository;
@@ -40,6 +45,9 @@ public class BuildingService implements IBuildingService {
     private BuildingConverter buildingConverter	;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UploadFileUtils uploadFileUtils;
 
     @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
@@ -60,21 +68,8 @@ public class BuildingService implements IBuildingService {
     @Override
     public void addOrUpdateBuilding(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
-        if(buildingDTO.getRentArea() != null && !buildingDTO.getRentArea().isEmpty()) {
-            buildingRepository.save(buildingEntity);
-            List<RentAreaEntity> rentAreaEntities = new ArrayList<RentAreaEntity>();
-            List<String> rentAreaInput = Arrays.asList(buildingDTO.getRentArea().split(",\\s*"));
-            List<Long> rentAreaList = rentAreaInput.stream().map(Long::parseLong).collect(Collectors.toList());
-            for (Long rentAreaValue : rentAreaList) {
-                RentAreaEntity rentAreaEntity = new RentAreaEntity();
-                rentAreaEntity.setValue(rentAreaValue);
-                rentAreaEntity.setBuilding(buildingEntity);
-                rentAreaRepository.save(rentAreaEntity);
-            }
-        }
-        else{
-            buildingRepository.save(buildingEntity);
-            }
+        saveThumbnail(buildingDTO,buildingEntity);
+        buildingRepository.save(buildingEntity);
     }
 
 
@@ -82,8 +77,8 @@ public class BuildingService implements IBuildingService {
     @Override
     public void deleteByIdsIn(List <Long> ids) {
             List<BuildingEntity> buildingEntities = buildingRepository.findAllByIdIn(ids);
-            assignmentBuildingRepository.deleteByBuildingsIn(buildingEntities);
-            rentAreaRepository.deleteByBuildingIdIn(ids);
+//            assignmentBuildingRepository.deleteByBuildingsIn(buildingEntities);
+//            rentAreaRepository.deleteByBuildingIdIn(ids);
             buildingRepository.deleteByIdIn(ids);
     }
 
@@ -101,8 +96,24 @@ public class BuildingService implements IBuildingService {
     }
 
     @Override
-    public int countTotalItems() {
-        return buildingRepository.countTotalItem();
+    public int countTotalItems(BuildingSearchRequest buildingSearchRequest) {
+        return buildingRepository.countTotalItem(buildingSearchRequest);
+    }
+
+    @Override
+    public void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+        String path = "/building/" + buildingDTO.getImageName();
+        if (null != buildingDTO.getImageBase64()) {
+            if (null != buildingEntity.getAvatar()) {
+                if (!path.equals(buildingEntity.getAvatar())) {
+                    File file = new File("C://home/office" + buildingEntity.getAvatar());
+                    file.delete();
+                }
+            }
+            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+            uploadFileUtils.writeOrUpdate(path, bytes);
+            buildingEntity.setAvatar(path);
+        }
     }
 
 }

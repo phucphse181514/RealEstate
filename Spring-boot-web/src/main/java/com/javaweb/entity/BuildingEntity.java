@@ -131,11 +131,11 @@ public class BuildingEntity extends BaseEntity{
     @Column(name = "managerphone")
     private String managerPhone;
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
     private List<RentAreaEntity> rentAreas = new ArrayList<>();
 
 
-    @OneToMany(mappedBy="buildings", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="buildings", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
 
 //    @ManyToMany(fetch = FetchType.LAZY)

@@ -12,11 +12,11 @@ import javax.persistence.*;
 public class AssignmentBuildingEntity extends BaseEntity {
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staffid")
     private UserEntity staffs;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buildingid")
     private BuildingEntity buildings;
 

@@ -8,7 +8,6 @@
 						<span class="bigger-120">
 							<span class="blue bolder">DEVNGUYEN.com</span>
 						</span>
-
             &nbsp; &nbsp;
             <span class="action-buttons">
 							<a href="#">

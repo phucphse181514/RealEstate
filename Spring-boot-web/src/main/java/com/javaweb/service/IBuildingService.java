@@ -1,5 +1,6 @@
 package com.javaweb.service;
 
+import com.javaweb.entity.BuildingEntity;
 import com.javaweb.model.dto.AssignmentBuildingDTO;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
@@ -16,5 +17,7 @@ public interface IBuildingService {
 
     void assignBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
 
-    int countTotalItems();
+    int countTotalItems(BuildingSearchRequest buildingSearchRequest);
+
+    void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity);
 }
