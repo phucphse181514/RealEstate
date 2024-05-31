@@ -1,9 +1,13 @@
 package com.javaweb.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 public class UserEntity extends BaseEntity {
@@ -35,11 +39,11 @@ public class UserEntity extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false))
     private List<RoleEntity> roles = new ArrayList<>();
 
-//    @ManyToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private List<BuildingEntity> building = new ArrayList<>();
+    @ManyToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<BuildingEntity> building = new ArrayList<>();
 
-    @OneToMany(mappedBy="staffs", cascade = CascadeType.ALL)
-    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
+//    @OneToMany(mappedBy="staffs", cascade = CascadeType.ALL)
+//    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
 
 
 //    @OneToMany(mappedBy="users", fetch = FetchType.LAZY)

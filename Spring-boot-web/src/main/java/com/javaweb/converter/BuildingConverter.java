@@ -2,11 +2,13 @@ package com.javaweb.converter;
 
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.RentAreaEntity;
+import com.javaweb.entity.UserEntity;
 import com.javaweb.enums.districtCode;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.repository.RentAreaRepository;
+import com.javaweb.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,9 @@ public class BuildingConverter {
 
     @Autowired
     private RentAreaRepository rentAreaRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public BuildingSearchResponse toBuildingSearchResponse (BuildingEntity building) {
         BuildingSearchResponse buildingSearchResponse = modelMapper.map(building, BuildingSearchResponse.class); // BuildingDTO.class generic class
@@ -51,6 +56,10 @@ public class BuildingConverter {
                 rentAreaEntities.add(rentAreaEntity);
             }
             buildingEntity.setRentAreas(rentAreaEntities);
+        }
+        if(buildingDTO.getId() != null){
+            List<UserEntity> userEntities = userRepository.findByBuildingIdIs(buildingDTO.getId());
+            buildingEntity.setUser(userEntities);
         }
         return buildingEntity;
     }

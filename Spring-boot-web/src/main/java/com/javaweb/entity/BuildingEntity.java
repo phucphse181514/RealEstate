@@ -131,20 +131,20 @@ public class BuildingEntity extends BaseEntity{
     @Column(name = "managerphone")
     private String managerPhone;
 
-    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<RentAreaEntity> rentAreas = new ArrayList<>();
 
 
-    @OneToMany(mappedBy="buildings", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
+//    @OneToMany(mappedBy="buildings", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<AssignmentBuildingEntity> assignmentBuildingEntities = new ArrayList<>();
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @Getter
-//    @Setter
-//    @JoinTable(name = "assignmentbuilding",
-//            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
-//    private List<UserEntity> user = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Getter
+    @Setter
+    @JoinTable(name = "assignmentbuilding",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    private List<UserEntity> user = new ArrayList<>();
 
 
 }

@@ -14,7 +14,7 @@ public class BuildingDTO extends AbstractDTO{
     private Long floorArea;
     private String level;
     private List<String> typeCode;
-        private String overtimeFee;
+    private String overtimeFee;
     private String electricityFee;
     private String deposit;
     private String payment;
