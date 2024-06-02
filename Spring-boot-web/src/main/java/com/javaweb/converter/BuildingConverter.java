@@ -7,6 +7,7 @@ import com.javaweb.enums.districtCode;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
+import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -30,6 +31,8 @@ public class BuildingConverter {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BuildingRepository buildingRepository;
 
     public BuildingSearchResponse toBuildingSearchResponse (BuildingEntity building) {
         BuildingSearchResponse buildingSearchResponse = modelMapper.map(building, BuildingSearchResponse.class); // BuildingDTO.class generic class
@@ -60,7 +63,9 @@ public class BuildingConverter {
         if(buildingDTO.getId() != null){
             List<UserEntity> userEntities = userRepository.findByBuildingIdIs(buildingDTO.getId());
             buildingEntity.setUser(userEntities);
+            buildingEntity.setAvatar(buildingRepository.findOneById(buildingDTO.getId()).getAvatar());
         }
+
         return buildingEntity;
     }
 }

@@ -35,12 +35,6 @@ public class BuildingService implements IBuildingService {
     private BuildingRepository buildingRepository;
 
     @Autowired
-    private RentAreaRepository rentAreaRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private BuildingConverter buildingConverter	;
     @Autowired
     private UserRepository userRepository;
@@ -75,7 +69,7 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public void deleteByIdsIn(List <Long> ids) {
-            List<BuildingEntity> buildingEntities = buildingRepository.findAllByIdIn(ids);
+//            List<BuildingEntity> buildingEntities = buildingRepository.findAllByIdIn(ids);
 //            assignmentBuildingRepository.deleteByBuildingsIn(buildingEntities);
 //            rentAreaRepository.deleteByBuildingIdIn(ids);
             buildingRepository.deleteByIdIn(ids);
@@ -84,15 +78,9 @@ public class BuildingService implements IBuildingService {
     @Override
     public void assignBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
         BuildingEntity buildingEntity = buildingRepository.findOneById(assignmentBuildingDTO.getBuildingId());
-        List<BuildingEntity> buildingEntities = new ArrayList<>();
-        buildingEntities.add(buildingEntity);
         List<UserEntity> staffs = userRepository.findByIdIn(assignmentBuildingDTO.getStaffs());
         buildingEntity.setUser(staffs);
         buildingRepository.save(buildingEntity);
-        for(UserEntity staff : staffs) {
-           staff.setBuilding(buildingEntities);
-           userRepository.save(staff);
-        }
     }
     @Override
     public int countTotalItems(BuildingSearchRequest buildingSearchRequest) {
