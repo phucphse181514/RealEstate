@@ -44,7 +44,7 @@ public class BuildingConverter {
         buildingSearchResponse.setRentArea(rentAreas);
         return buildingSearchResponse;
     }
-
+    
     public BuildingEntity toBuildingEntity (BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = modelMapper.map(buildingDTO, BuildingEntity.class);
         buildingEntity.setType(String.join(",", buildingDTO.getTypeCode()));

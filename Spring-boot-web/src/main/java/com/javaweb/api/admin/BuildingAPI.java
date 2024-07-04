@@ -45,8 +45,9 @@ public class BuildingAPI {
     }
 
     @PutMapping
-    public void assignBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO){
+    public void assignBuilding(@RequestBody AssignmentBuildingDTO assignmentBuildingDTO) {
         buildingService.assignBuilding(assignmentBuildingDTO);
     }
+
 
 }

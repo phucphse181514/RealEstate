@@ -6,8 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="/common/taglib.jsp"%>
-    <c:url var="buildingEditUrl" value="admin/building-edit"/>
+<%@include file="/common/taglib.jsp" %>
+<c:url var="buildingEditUrl" value="admin/building-edit"/>
 <html>
 <head>
     <title>Thêm sửa tòa nhà</title>
@@ -19,7 +19,8 @@
             <script type="text/javascript">
                 try {
                     ace.settings.check("breadcrumbs", "fixed");
-                } catch (e) {}
+                } catch (e) {
+                }
             </script>
 
             <ul class="breadcrumb">
@@ -57,11 +58,10 @@
             </div>
             <div class="row" style="font-family: 'Times New Roman', Times, serif; margin-bottom: 70px;">
                 <div class="col-xs-12">
-                    <form:form modelAttribute="buildingEdit" action="${buildingEditUrl}" id="form-edit" method="get" >
+                    <form:form modelAttribute="buildingEdit" action="${buildingEditUrl}" id="form-edit" method="get">
                         <div class="form-group">
                             <label class="col-xs-3">Tên tòa nhà</label>
                             <div class="col-xs-9">
-<%--                                <input class="form-control" type="text" name="name">--%>
                                 <form:input path="name" class="form-control"/>
                             </div>
 
@@ -69,56 +69,56 @@
                         <div class="form-group">
                             <label class="col-xs-3">Quận hiện có</label>
                             <div class="col-xs-9">
-                            <form:select path="district" >
-                                <form:option value="" label="--Chọn quận---"/>
-                                <form:options items="${districtCode}"/>
-                            </form:select>
+                                <form:select path="district">
+                                    <form:option value="" label="--Chọn quận---"/>
+                                    <form:options items="${districtCode}"/>
+                                </form:select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Phường</label>
                             <div class="col-xs-9">
-                                <form:input path="ward" class="form-control" />
+                                <form:input path="ward" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Đường</label>
                             <div class="col-xs-9">
-                                <form:input path="street" class="form-control" />
+                                <form:input path="street" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Kết cấu</label>
                             <div class="col-xs-9">
-                                <form:input path="structure" class="form-control" />
+                                <form:input path="structure" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Số tầng hầm</label>
                             <div class="col-xs-9">
-                                <form:input path="numberOfBasement" class="form-control" />
+                                <form:input path="numberOfBasement" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Diện tích sàn</label>
                             <div class="col-xs-9">
-                                <form:input path="floorArea" class="form-control" />
+                                <form:input path="floorArea" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Hướng</label>
                             <div class="col-xs-9">
-                                <form:input path="direction" class="form-control" />
+                                <form:input path="direction" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Hạng</label>
                             <div class="col-xs-9">
-                                <form:input path="level" class="form-control" />
+                                <form:input path="level" class="form-control"/>
                             </div>
 
                         </div>
@@ -126,98 +126,98 @@
                         <div class="form-group">
                             <label class="col-xs-3">Diện tích thuê</label>
                             <div class="col-xs-9">
-                                <form:input path="rentArea" class="form-control" />
+                                <form:input path="rentArea" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Giá thuê</label>
                             <div class="col-xs-9">
-                                <form:input path="rentPrice" class="form-control" />
+                                <form:input path="rentPrice" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Mô tả giá</label>
                             <div class="col-xs-9">
-                                <form:input path="rentPriceDescription" class="form-control" />
+                                <form:input path="rentPriceDescription" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Phí dịch vụ</label>
                             <div class="col-xs-9">
-                                <form:input path="serviceFee" class="form-control" />
+                                <form:input path="serviceFee" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Phí ô tô</label>
                             <div class="col-xs-9">
-                                <form:input path="carFee" class="form-control" />
+                                <form:input path="carFee" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Phí ngoài giờ</label>
                             <div class="col-xs-9">
-                                <form:input path="overtimeFee" class="form-control" />
+                                <form:input path="overtimeFee" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Tiền điện</label>
                             <div class="col-xs-9">
-                                <form:input path="electricityFee" class="form-control" />
+                                <form:input path="electricityFee" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Đặt cọc</label>
                             <div class="col-xs-9">
-                                <form:input path="deposit" class="form-control" />
+                                <form:input path="deposit" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Thanh toán</label>
                             <div class="col-xs-9">
-                                <form:input path="payment" class="form-control" />
+                                <form:input path="payment" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Thời hạn thuê</label>
                             <div class="col-xs-9">
-                                <form:input path="rentTime" class="form-control" />
+                                <form:input path="rentTime" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Tên quản lí</label>
                             <div class="col-xs-9">
-                                <form:input path="managerName" class="form-control" />
+                                <form:input path="managerName" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">SĐT quản lí</label>
                             <div class="col-xs-9">
-                                <form:input path="managerPhone" class="form-control" />
+                                <form:input path="managerPhone" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Phí môi giới</label>
                             <div class="col-xs-9">
-                                <form:input path="brokerageFee" class="form-control" />
+                                <form:input path="brokerageFee" class="form-control"/>
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3">Loại tòa nhà</label>
                             <div class="col-xs-9">
-                                <form:checkboxes path="typeCode" items="${typeCodes}" />
+                                <form:checkboxes path="typeCode" items="${typeCodes}"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -226,7 +226,8 @@
                             <div class="col-sm-9">
                                 <c:if test="${not empty buildingEdit.image}">
                                     <c:set var="imagePath" value="/repository${buildingEdit.image}"/>
-                                    <img src="${imagePath}" id="viewImage" width="300px" height="300px" style="margin-top: 50px">
+                                    <img src="${imagePath}" id="viewImage" width="300px" height="300px"
+                                         style="margin-top: 50px">
                                 </c:if>
                                 <c:if test="${empty buildingEdit.image}">
                                     <img src="/admin/image/default.png" id="viewImage" width="300px" height="300px">
@@ -236,18 +237,20 @@
                         <div class="form-group">
                             <label class="col-xs-3">Ghi chú</label>
                             <div class="col-xs-9">
-                                <form:input path="note" class="form-control" />
+                                <form:input path="note" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-3"></label>
                             <div class="col-xs-9">
                                 <c:if test="${empty buildingEdit.id}">
-                                <button class="btn btn-primary" id="btnAddOrUpdateBuilding">Thêm mới</button>
+                                    <button class="btn btn-primary" id="btnAddOrUpdateBuilding">Thêm mới</button>
                                 </c:if>
                                 <c:if test="${not empty buildingEdit.id}">
+                                    <security:authorize access="hasRole('MANAGER')">
                                     <button class="btn btn-warning" id="btnAddOrUpdateBuilding">Sửa tòa nhà</button>
                                     <form:input path="id" type="hidden" value="${buildingEdit.id}"/>
+                                    </security:authorize>
                                 </c:if>
                                 <a href="/admin/building-list">
                                     <button type="button" class="btn btn-primary">Hủy thao tác</button>
@@ -257,7 +260,6 @@
                         </div>
                     </form:form>
                 </div>
-
 
 
                 <!-- /.page-header -->
@@ -311,7 +313,7 @@
     $('#uploadImage').change(function (event) {
         var reader = new FileReader();
         var file = $(this)[0].files[0];
-        reader.onload = function(e){
+        reader.onload = function (e) {
             imageBase64 = e.target.result;
             imageName = file.name; // ten hinh khong dau, khoang cach. Dat theo format sau: a-b-c
         };
@@ -324,55 +326,54 @@
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('#' +imageView).attr('src', reader.result);
+                $('#' + imageView).attr('src', reader.result);
             }
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    $('#btnAddOrUpdateBuilding') .click(function(e){
+    $('#btnAddOrUpdateBuilding').click(function (e) {
         e.preventDefault();
         var data = {}; // khai báo object
         var typeCode = [];
         var formData = $('#form-edit').serializeArray();
-        $.each(formData, function(index, item){
+        $.each(formData, function (index, item) {
             if ('' !== imageBase64) {
                 data['imageBase64'] = imageBase64;
                 data['imageName'] = imageName;
             }
-            if(item.name != "typeCode"){
+            if (item.name != "typeCode") {
                 data["" + item.name + ""] = item.value;
-            }
-            else{
+            } else {
                 typeCode.push(item.value);
             }
         })
         data["typeCode"] = typeCode;
-        if(typeCode.length == 0){
+        if (typeCode.length == 0) {
             return alert("Loại tòa nhà không được thiếu!");
-        } else{
+        } else {
             btnAddOrUpdate(data);
         }
 
     })
-    function btnAddOrUpdate(data){
+
+    function btnAddOrUpdate(data) {
         $.ajax({
             type: "POST",
             url: "/api/buildings/",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "text",
-            success: (response) =>{
+            success: (response) => {
                 alert(response);
                 window.location.replace("/admin/building-list");
             },
-            error: function(response){
+            error: function (response) {
                 console.log("failed");
                 console.log(response);
             }
         });
     }
-
 
 
 </script>
@@ -424,7 +425,7 @@
 
         $("#aside-inside-modal")
             .addClass("aside")
-            .ace_aside({ container: "#my-modal > .modal-dialog" });
+            .ace_aside({container: "#my-modal > .modal-dialog"});
 
         $(document).one("ajaxloadstart.page", function (e) {
             //in ajax mode, remove before leaving page

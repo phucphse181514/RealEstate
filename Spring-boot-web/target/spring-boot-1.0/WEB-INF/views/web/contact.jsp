@@ -1,13 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
+<c:url var="customerContactUrl" value="/lien-he"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liên hệ</title>
 </head>
 <body>
@@ -116,21 +113,21 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <h2 class="title-lienhe"><strong>Liên hệ với chúng tôi</strong></h2>
-                    <form>
+                    <form:form action="${customerContactUrl}" modelAttribute="customerContact" id="form-edit" method="GET">
                         <div class="row">
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Họ và tên">
+                                <form:input path="fullName" class="form-control" placeholder="Họ và tên"/>
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Email">
+                                <form:input path="email" class="form-control" placeholder="Email"/>
                             </div>
                         </div>
-                        <input type="text" class="form-control mt-3" placeholder="Số điện thoại">
-                        <input type="text" class="form-control mt-3" placeholder="Nội dung">
-                        <button class="btn btn-primary px-4 mt-3">
+                        <form:input path="phone" class="form-control mt-3" placeholder="Số điện thoại"/>
+                        <form:input path="demand" class="form-control mt-3" placeholder="Nội dung"/>
+                        <button class="btn btn-primary px-4 mt-3" id="btnAddOrUpdateCustomer">
                             Gửi liên hệ
                         </button>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>
@@ -158,7 +155,7 @@
                             </div>
                             <div class="col-12 col-md-4 text-center">
                                 <div class="icon-footer">
-                                    <img src="https://bizweb.dktcdn.net/100/328/362/themes/894751/assets/place_phone.png?1676257083798 alt="">
+                                    <img src="https://bizweb.dktcdn.net/100/328/362/themes/894751/assets/place_phone.png?1676257083798" alt="">
                                 </div>
                                 <div class="content-center-footer">
                                     <p class="mb-1 mt-3">Hotline</p>
@@ -233,6 +230,44 @@
         </div>
     </footer>
 </div>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="web/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+    $('#btnAddOrUpdateCustomer').click(function (e) {
+        e.preventDefault();
+        var data = {}; // khai báo object
+        var formData = $('#form-edit').serializeArray();
+        $.each(formData, function (index, item) {
+            data["" + item.name + ""] = item.value;
+        })
+        if (data["fullName"].length == 0 ) {
+            return alert("Tên khách hàng không được thiếu!");
+        }
+        else if (data["phone"].length == 0 ) {
+            return alert("SĐT khách hàng không được thiếu!");
+        }
+        else btnAddOrUpdate(data);
+    })
+    function btnAddOrUpdate(data) {
+        $.ajax({
+            type: "POST",
+            url: "/api/customers/",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: (response) => {
+                alert(response);
+            },
+            error: function (response) {
+                console.log("failed");
+                console.log(response);
+            }
+        });
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 </body>

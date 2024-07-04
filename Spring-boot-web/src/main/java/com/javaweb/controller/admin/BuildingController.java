@@ -12,6 +12,7 @@ import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RentAreaRepository;
+import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
 import com.javaweb.utils.DisplayTagUtils;
@@ -58,7 +59,15 @@ public class BuildingController {
         mav.addObject("districtCode", districtCode.district());
         mav.addObject("typeCodes", typeCode.getTypeCode());
         //Xuong DB lay data len
-        List<BuildingSearchResponse> result = buildingService.findAll(model);
+        List<BuildingSearchResponse> result = new ArrayList<>();
+        if(SecurityUtils.getAuthorities().contains("ROLE_STAFF")){
+            Long staffId = SecurityUtils.getPrincipal().getId();
+            model.setStaffId(staffId);
+            result = buildingService.findAll(model);
+        }
+        else{
+            result = buildingService.findAll(model);
+        }
         model.setListResult(result);
         model.setTotalItems(buildingService.countTotalItems(model));
         mav.addObject(SystemConstant.MODEL, model);
