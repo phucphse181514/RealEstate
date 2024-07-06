@@ -54,7 +54,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public void addOrUpdateCustomer(CustomerDTO customerDTO) {
         CustomerEntity customerEntity = modelMapper.map(customerDTO, CustomerEntity.class);
-        if(customerDTO.getId() == null && customerDTO.getStatus().isEmpty()){
+        if(customerDTO.getId() == null && customerDTO.getStatus() == null){
             customerEntity.setStatus(CustomerStatus.CHUA_XU_LY.toString());
         }
         customerEntity.setIsActive(1L);

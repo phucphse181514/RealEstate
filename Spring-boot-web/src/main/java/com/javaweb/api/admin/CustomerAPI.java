@@ -18,7 +18,6 @@ public class CustomerAPI {
     private ICustomerService customerService;
     @PostMapping
     public String addOrUpdateCustomer(@RequestBody CustomerDTO customerDTO){
-        //xuong DB them data
         customerService.addOrUpdateCustomer(customerDTO);
         if(customerDTO.getId() == null ) return new String("Add customer successfully!");
         else return new String("Update customer successfully!");

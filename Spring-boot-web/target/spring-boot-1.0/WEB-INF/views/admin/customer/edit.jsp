@@ -59,7 +59,7 @@
             </div>
             <div class="row" style="font-family: 'Times New Roman', Times, serif; margin-bottom: 70px;">
                 <div class="col-xs-12">
-                    <form:form modelAttribute="customerEdit" action="${customerEditUrl}" id="form-edit" method="get">
+                    <form:form modelAttribute="customerEdit" action="/admin/customer-edit" id="form-edit" method="GET">
                         <div class="form-group">
                             <label class="col-xs-3">Tên khách hàng</label>
                             <div class="col-xs-9">
@@ -105,7 +105,7 @@
                             <label class="col-xs-3"></label>
                             <div class="col-xs-9">
                                 <c:if test="${empty customerEdit.id}">
-                                    <button class="btn btn-primary" id="btnAddOrUpdateCustomer">Thêm mới</button>
+                                    <button type="button" class="btn btn-primary" id="btnAddOrUpdateCustomer">Thêm mới</button>
                                 </c:if>
                                 <c:if test="${not empty customerEdit.id}">
                                     <security:authorize access="hasRole('MANAGER')">
@@ -126,7 +126,7 @@
                     <div class="col-xs-12">
                         <div class="col-sm-12">
                             <h3 class="header smaller lighter blue">${item.value}</h3>
-                            <button class="btn btn-lg btn-primary" onclick="transactionType('${item.key}', ${customerEdit.id})">
+                             <button class="btn btn-lg btn-primary" onclick="transactionType('${item.key}', ${customerEdit.id})">
                                 <i class="orange ace-icon fa fa-location-arrow bigger-130"></i>Add
                             </button>
                         </div>
@@ -167,7 +167,7 @@
                         </c:if>
                         <c:if test="${item.key == 'DDX' and not empty DDXList}">
                                 <div class="col-xs-12">
-                                    <table id="simple-table" class="table table-striped table-bordered table-hover">
+                                    <table class="table table-striped table-bordered table-hover">
                                         <thead>
                                         <tr>
                                             <th>Ngày tạo</th>
@@ -196,14 +196,10 @@
                                             </tr>
                                         </c:forEach>
                                         </tbody>
-
                                     </table>
                                 </div>
-
                         </c:if>
                     </div>
-
-
                 </c:forEach>
 
                 <!-- /.page-header -->
@@ -247,81 +243,84 @@
 </div>
 <script src="assets/js/jquery.2.1.1.min.js"></script>
 <script>
-    $('#btnAddOrUpdateCustomer').click(function (e) {
-        e.preventDefault();
-        var data = {}; // khai báo object
-        var formData = $('#form-edit').serializeArray();
-        $.each(formData, function (index, item) {
-            data["" + item.name + ""] = item.value;
-        })
-        if (data["fullName"].length == 0 ) {
-            return alert("Tên khách hàng không được thiếu!");
-        }
-        else if (data["phone"].length == 0 ) {
-            return alert("SĐT khách hàng không được thiếu!");
-        }
-        else btnAddOrUpdate(data);
-    })
-
-    function btnAddOrUpdate(data) {
-        $.ajax({
-            type: "POST",
-            url: "/api/customers/",
-            data: JSON.stringify(data),
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: (response) => {
-                alert(response);
-                window.location.replace("/admin/customer-list");
-            },
-            error: function (response) {
-                console.log("failed");
-                console.log(response);
+    $(document).ready(function () {
+        $('#btnAddOrUpdateCustomer').click(function (e) {
+            console.log('Button clicked');
+            e.preventDefault();
+            var data = {}; // Declare object
+            var formData = $('#form-edit').serializeArray();
+            $.each(formData, function (index, item) {
+                data[item.name] = item.value;
+            });
+            if (data["fullName"].length === 0) {
+                return alert("Tên khách hàng không được thiếu!");
+            } else if (data["phone"].length === 0) {
+                return alert("SĐT khách hàng không được thiếu!");
+            } else {
+                btnAddOrUpdate(data);
             }
         });
-    }
-    function transactionType(code, customerId){
-        $('#transactionTypeModal').modal();
-        $('#customerId').val(customerId);
-        $('#code').val(code);
-        $('#id').val("");
 
-    }
-    function UpdateTransaction(id, note){
-        $('#transactionDetail').val(note);
-        $('#transactionTypeModal').modal();
-        $('#id').val(id);
-    }
-    $('#btnAddOrUpdateTransaction').click(function (e){
-        e.preventDefault();
-        var data = {};
-        data['id'] = $('#id').val();
-        data['customerId'] = $('#customerId').val();
-        data['code'] = $('#code').val();
-        data['transactionDetail'] = $('#transactionDetail').val();
-        addTransaction(data);
-    })
-    function addTransaction(data){
-        $.ajax({
-            type: "POST",
-            url: "/api/customers/transaction/",
-            data: JSON.stringify(data),
-            dataType: "text",
-            contentType: "application/json; charset=utf-8",
-            success: (response) => {
-                alert("Add transaction success!");
-                window.location.replace("customer-edit-" + ${customerEdit.id})
-            },
-            error: function (response) {
-                console.log("failed");
-                console.log("Add transaction unsuccessfully!");
-            }
+        function btnAddOrUpdate(data) {
+            $.ajax({
+                type: "POST",
+                url: "/api/customers/",
+                data: JSON.stringify(data),
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
+                    alert(response);
+                    window.location.replace("/admin/customer-list");
+                },
+                error: function(response) {
+                    console.log("Failed");
+                    console.log(response);
+                }
+            });
+        }
+
+        $('#btnAddOrUpdateTransaction').click(function (e) {
+            e.preventDefault();
+            var data = {};
+            data['id'] = $('#id').val();
+            data['customerId'] = $('#customerId').val();
+            data['code'] = $('#code').val();
+            data['transactionDetail'] = $('#transactionDetail').val();
+            addTransaction(data);
         });
-    }
 
+        function addTransaction(data) {
+            $.ajax({
+                type: "POST",
+                url: "/api/customers/transaction/",
+                data: JSON.stringify(data),
+                dataType: "text",
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
+                    alert("Add transaction success!");
+                    window.location.replace("customer-edit-" + data.customerId);
+                },
+                error: function(response) {
+                    console.log("Failed");
+                    console.log("Add transaction unsuccessfully!");
+                }
+            });
+        }
 
+        function transactionType(code, customerId) {
+            $('#transactionTypeModal').modal();
+            $('#customerId').val(customerId);
+            $('#code').val(code);
+            $('#id').val("");
+        }
+
+        function UpdateTransaction(id, note) {
+            $('#transactionDetail').val(note);
+            $('#transactionTypeModal').modal();
+            $('#id').val(id);
+        }
+    });
 </script>
-
 <!-- <![endif]-->
 
 <!--[if IE]>
