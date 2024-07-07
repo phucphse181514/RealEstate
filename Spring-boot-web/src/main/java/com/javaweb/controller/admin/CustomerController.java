@@ -1,9 +1,7 @@
 package com.javaweb.controller.admin;
 
 import com.javaweb.constant.SystemConstant;
-import com.javaweb.entity.BuildingEntity;
-import com.javaweb.entity.CustomerEntity;
-import com.javaweb.entity.TransactionEntity;
+import com.javaweb.entity.*;
 import com.javaweb.enums.CustomerStatus;
 import com.javaweb.enums.TransactionType;
 import com.javaweb.enums.districtCode;
@@ -12,8 +10,10 @@ import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.dto.CustomerDTO;
 import com.javaweb.model.request.CustomerSearchRequest;
 import com.javaweb.model.response.CustomerResponseDTO;
+import com.javaweb.repository.AssignmentCustomerRepository;
 import com.javaweb.repository.CustomerRepository;
 import com.javaweb.repository.TransactionRepository;
+import com.javaweb.repository.UserRepository;
 import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.ICustomerService;
 import com.javaweb.service.IUserService;
@@ -47,6 +47,10 @@ public class CustomerController {
     private ModelMapper modelMapper;
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private AssignmentCustomerRepository assignmentCustomerRepository;
 
     @GetMapping("/admin/customer-list")
     public ModelAndView getAllCustomer(@ModelAttribute(SystemConstant.MODEL) CustomerSearchRequest model, HttpServletRequest request) {
@@ -89,6 +93,10 @@ public class CustomerController {
     }
     @GetMapping(value="/admin/customer-edit-{id}")
     public ModelAndView updateCustomer(@PathVariable Long id){
+        UserEntity staff = userRepository.findOneByUserNameAndStatus(SecurityUtils.getPrincipal().getUsername(), 1);
+        if(assignmentCustomerRepository.findByCustomerIdAndStaffId(id, staff.getId()) == null){
+            return new ModelAndView("error");
+        }
         ModelAndView mav = new ModelAndView("admin/customer/edit");
         mav.addObject("customerStatus", CustomerStatus.customerStatusList());
         CustomerEntity customerEntity = customerRepository.findCustomerEntityById(id);

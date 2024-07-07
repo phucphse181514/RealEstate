@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface AssignmentCustomerRepository extends JpaRepository<AssignmentCustomerEntity, Long> {
     List<AssignmentCustomerEntity> findAllByCustomer(CustomerEntity customerEntity);
+    AssignmentCustomerEntity findByCustomerIdAndStaffId(Long customerId, Long staffId);
 }

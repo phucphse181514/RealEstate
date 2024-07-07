@@ -9,6 +9,7 @@
 <%@include file="/common/taglib.jsp" %>
 <c:url var="customerAPI" value="/api/customers"/>
 <c:url var="formUrl" value="/admin/customer-list"/>
+
 <html>
 <head>
     <title>Danh sách khách hàng</title>
@@ -193,10 +194,13 @@
                                             class="ace-icon glyphicon glyphicon-align-justify"
                                     ></i>
                                 </button>
+                                <c:if test="${assignedCustomerIds}">
+
+                                </c:if>
                                 <a href="/admin/customer-edit-${tableList.id}">
                                     <button
                                             title="Sửa khách hàng"
-                                            class="btn btn-sm btn-info"
+                                            class="btn btn-sm btn-incontaintfo"
                                     >
                                         <i class="ace-icon glyphicon glyphicon-edit"></i>
                                     </button>
